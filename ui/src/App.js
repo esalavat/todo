@@ -1,15 +1,16 @@
 import './App.css';
-import { Container, Typography, Box } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import TodoDetailPage from './pages/TodoDetailPage';
 
 function App() {
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h2" component="h1" gutterBottom>
-          Todo List App
-        </Typography>
-      </Box>
-    </Container>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/list/:id" element={<TodoDetailPage />} />
+      </Routes>
+    </Router>
   );
 }
 
