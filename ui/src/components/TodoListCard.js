@@ -9,6 +9,8 @@ const TodoListCard = ({ todoList }) => {
     navigate(`/list/${todoList.id}`);
   };
 
+  const uncompletedCount = todoList.totalCount - todoList.completedCount;
+
   return (
     <Card sx={{ mb: 2 }}>
       <CardActionArea onClick={handleClick}>
@@ -18,7 +20,7 @@ const TodoListCard = ({ todoList }) => {
               {todoList.title}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {todoList.itemCount} {todoList.itemCount === 1 ? 'item' : 'items'}
+              {uncompletedCount}/{todoList.totalCount}
             </Typography>
           </Box>
         </CardContent>

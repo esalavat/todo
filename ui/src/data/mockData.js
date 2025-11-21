@@ -5,21 +5,25 @@ export const mockTodoLists = [
   {
     id: 1,
     title: 'Shopping List',
-    itemCount: 5
+    completedCount: 2,
+    totalCount: 5
   },
   {
     id: 2,
     title: 'Work Tasks',
-    itemCount: 8
+    completedCount: 5,
+    totalCount: 8
   },
   {
     id: 3,
     title: 'Personal Goals',
-    itemCount: 3
+    completedCount: 1,
+    totalCount: 3
   },
   {
     id: 4,
     title: 'Home Improvements',
-    itemCount: 12
+    completedCount: 4,
+    totalCount: 12
   }
 ];
