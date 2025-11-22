@@ -58,4 +58,14 @@ public class TodoList {
         todos.remove(todo);
         todo.setTodoList(null);
     }
+
+    public int getTotalCount() {
+        return todos.size();
+    }
+
+    public int getCompletedCount() {
+        return (int) todos.stream()
+                .filter(Todo::isCompleted)
+                .count();
+    }
 }
