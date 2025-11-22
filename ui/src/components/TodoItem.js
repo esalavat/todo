@@ -1,35 +1,14 @@
 import React, { useState } from 'react';
-import { Box, Checkbox, IconButton, TextField } from '@mui/material';
+import { Box, Checkbox, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditableText from './EditableText';
 
 const TodoItem = ({ todo, onToggle, onUpdate, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [text, setText] = useState(todo.text);
 
-  const handleTextClick = () => {
-    if (!todo.completed) {
-      setIsEditing(true);
-    }
-  };
-
-  const handleBlur = () => {
-    setIsEditing(false);
-    if (text !== todo.text && text.trim() !== '') {
-      onUpdate(todo.id, text);
-    } else {
-      setText(todo.text);
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      e.target.blur();
-    }
-    if (e.key === 'Escape') {
-      setText(todo.text);
-      setIsEditing(false);
+  const handleTextChange = (newText) => {
+    if (newText.trim() !== '') {
+      onUpdate(todo.id, newText);
     }
   };
 
@@ -53,30 +32,29 @@ const TodoItem = ({ todo, onToggle, onUpdate, onDelete }) => {
         sx={{ mr: 1 }}
       />
 
-      {isEditing ? (
-        <TextField
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          variant="standard"
-          fullWidth
-          autoFocus
-          sx={{ flex: 1 }}
-        />
-      ) : (
-        <Box
-          onClick={handleTextClick}
+      {todo.completed ? (
+        <Typography
           sx={{
             flex: 1,
-            cursor: todo.completed ? 'default' : 'pointer',
-            textDecoration: todo.completed ? 'line-through' : 'none',
-            color: todo.completed ? 'text.disabled' : 'text.primary',
+            textDecoration: 'line-through',
+            color: 'text.disabled',
             userSelect: 'none'
           }}
         >
           {todo.text}
-        </Box>
+        </Typography>
+      ) : (
+        <EditableText
+          value={todo.text}
+          onChange={handleTextChange}
+          variant="body1"
+          placeholder="Enter todo text"
+          sx={{
+            flex: 1,
+            textDecoration: 'none',
+            color: 'text.primary'
+          }}
+        />
       )}
 
       {isHovered && (
