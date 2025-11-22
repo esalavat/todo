@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Checkbox, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditableText from './EditableText';
 
 const TodoItem = ({ todo, onToggle, onUpdate, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    // Detect if device supports hover (desktop) or is touch-only (mobile/tablet)
+    const hasHover = window.matchMedia('(hover: hover)').matches;
+    setIsTouchDevice(!hasHover);
+  }, []);
 
   const handleTextChange = (newText) => {
     if (newText.trim() !== '') {
       onUpdate(todo.id, newText);
     }
   };
+
+  const showDeleteButton = isTouchDevice || isHovered;
 
   return (
     <Box
@@ -57,7 +66,7 @@ const TodoItem = ({ todo, onToggle, onUpdate, onDelete }) => {
         />
       )}
 
-      {isHovered && (
+      {showDeleteButton && (
         <IconButton
           onClick={() => onDelete(todo.id)}
           size="small"
