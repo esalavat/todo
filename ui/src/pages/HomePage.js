@@ -1,16 +1,57 @@
-import React from 'react';
-import { Container, Typography, Box, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Container, Typography, Box, Button, CircularProgress, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import TodoListCard from '../components/TodoListCard';
-import { mockTodoLists } from '../data/mockData';
+import todoService from '../services/todoService';
 import AddIcon from '@mui/icons-material/Add';
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const [todoLists, setTodoLists] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    loadTodoLists();
+  }, []);
+
+  const loadTodoLists = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const lists = await todoService.getTodoLists();
+      setTodoLists(lists);
+    } catch (err) {
+      setError('Failed to load todo lists. Please make sure the API server is running.');
+      console.error('Error loading todo lists:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAddNewList = () => {
     navigate('/list/new');
   };
+
+  if (loading) {
+    return (
+      <Container maxWidth="md">
+        <Box sx={{ my: 4, display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Box>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="md">
+        <Box sx={{ my: 4 }}>
+          <Alert severity="error">{error}</Alert>
+        </Box>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="md">
@@ -20,7 +61,7 @@ const HomePage = () => {
         </Typography>
 
         <Box sx={{ mt: 3 }}>
-          {mockTodoLists.map((todoList) => (
+          {todoLists.map((todoList) => (
             <TodoListCard key={todoList.id} todoList={todoList} />
           ))}
         </Box>

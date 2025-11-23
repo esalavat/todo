@@ -13,6 +13,12 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initDatabase(TodoListRepository todoListRepository) {
         return args -> {
+            // Only initialize if database is empty
+            if (todoListRepository.count() > 0) {
+                System.out.println("Database already contains data, skipping initialization");
+                return;
+            }
+
             // Shopping List
             TodoList shoppingList = new TodoList("Shopping List");
             shoppingList.addTodo(new Todo("Buy milk", true));
